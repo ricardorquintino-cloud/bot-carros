@@ -76,15 +76,67 @@ def euros(n):
     return f"{n:,}".replace(",", ".") + " €" if n else "s/ preço"
 
 
+def formatar_data(bruto):
+    """
+    Transforma a data do anuncio em algo legivel: «hoje», «ontem», «ha 5 dias»
+    ou a data propriamente dita. Um anuncio antigo negoceia-se melhor que um
+    acabado de publicar, por isso vale a pena ver isto de relance.
+    """
+    if not bruto:
+        return ""
+    texto = str(bruto)[:19].replace("T", " ")
+    for formato in ("%Y-%m-%d %H:%M:%S", "%Y-%m-%d %H:%M", "%Y-%m-%d"):
+        try:
+            d = datetime.strptime(texto, formato)
+            break
+        except ValueError:
+            d = None
+    if d is None:
+        return str(bruto)[:10]
+
+    dias = (datetime.now() - d).days
+    if dias <= 0:
+        return "hoje"
+    if dias == 1:
+        return "ontem"
+    if dias < 30:
+        return f"há {dias} dias"
+    if dias < 365:
+        return f"há {dias // 30} meses · {d:%d/%m}"
+    return f"{d:%d/%m/%Y}"
+
+
 # --------------------------------------------------------------- extracao
 def extrair_next_data(html):
+    """
+    Encontra o bloco de dados da pagina. Tenta os formatos mais usados, por
+    ordem: __NEXT_DATA__ (Standvirtual, OLX), __NUXT_DATA__, __APOLLO_STATE__
+    e, em ultimo recurso, os blocos ld+json que muitos sites publicam.
+    """
     m = re.search(r'<script id="__NEXT_DATA__"[^>]*>(.*?)</script>', html, re.DOTALL)
-    if not m:
-        return None
-    try:
-        return json.loads(m.group(1))
-    except json.JSONDecodeError:
-        return None
+    if m:
+        try:
+            return json.loads(m.group(1))
+        except json.JSONDecodeError:
+            pass
+
+    for ident in ("__NUXT_DATA__", "__APOLLO_STATE__", "__INITIAL_STATE__"):
+        m = re.search(ident + r'\s*=\s*(\{.*?\})\s*;?\s*</script>', html, re.DOTALL)
+        if m:
+            try:
+                return json.loads(m.group(1))
+            except json.JSONDecodeError:
+                continue
+
+    blocos = []
+    for bruto in re.findall(
+            r'<script[^>]*type=["\']application/ld\+json["\'][^>]*>(.*?)</script>',
+            html, re.DOTALL):
+        try:
+            blocos.append(json.loads(bruto))
+        except json.JSONDecodeError:
+            continue
+    return {"ldjson": blocos} if blocos else None
 
 
 def percorrer(obj, _prof=0):
@@ -112,8 +164,9 @@ def percorrer(obj, _prof=0):
 
 
 def ler_parametros(no):
-    """Le ano, km e preco da lista de parametros do anuncio."""
+    """Le ano, km, preco, combustivel e data de publicacao do anuncio."""
     ano = km = preco = None
+    combustivel = None
     params = no.get("params") or no.get("parameters") or []
     if isinstance(params, list):
         for p in params:
@@ -123,12 +176,19 @@ def ler_parametros(no):
             valor = p.get("value")
             if valor in (None, "", []):
                 valor = p.get("displayValue")
-            if chave in ("motor_year", "year", "ano"):
+            if chave in ("motor_year", "year", "ano", "first_registration_year",
+                         "production_year", "rok_produkcji"):
                 ano = primeiro_numero(valor)
-            elif chave in ("motor_mileage", "mileage", "quilometros"):
+            elif chave in ("motor_mileage", "mileage", "quilometros", "przebieg"):
                 km = primeiro_numero(valor)
             elif chave in ("price", "preco"):
                 preco = primeiro_numero(valor)
+            elif chave in ("fuel_type", "combustivel", "fuel", "petrol"):
+                bruto = p.get("displayValue") or p.get("value")
+                if isinstance(bruto, dict):
+                    bruto = bruto.get("label") or bruto.get("key") or bruto.get("value")
+                if isinstance(bruto, str):
+                    combustivel = bruto
 
     if preco is None:
         preco = primeiro_numero(no.get("price"))
@@ -136,10 +196,37 @@ def ler_parametros(no):
         ano = primeiro_numero(no.get("year"))
     if km is None:
         km = primeiro_numero(no.get("mileage"))
-    return ano, km, preco
+    if combustivel is None and isinstance(no.get("fuelType"), str):
+        combustivel = no["fuelType"]
+
+    # ano, se nada resultou: tenta o titulo (ex.: "Yaris 2014") ou a data
+    if ano is None:
+        import re as _re
+        m = _re.search(r"\b(19[89]\d|20[0-3]\d)\b", str(no.get("title") or ""))
+        if m:
+            ano = int(m.group())
+
+    data = None
+    for campo in ("createdAt", "created_at", "publishedAt", "lastRefreshTime",
+                  "validToDate", "date"):
+        v = no.get(campo)
+        if isinstance(v, str) and len(v) >= 8:
+            data = v
+            break
+
+    return ano, km, preco, combustivel, data
 
 
-def extrair_anuncios(html):
+def extrair_anuncios(html, site=None):
+    """
+    `site` diz como reconhecer um anuncio naquele site: `marca_url` e o pedaco
+    que aparece no endereco de qualquer anuncio, e `base` serve para completar
+    enderecos relativos. Sem `site`, assume Standvirtual.
+    """
+    site = site or {}
+    marca = site.get("marca_url", "/anuncio/")
+    base = site.get("base", "https://www.standvirtual.com")
+
     dados = extrair_next_data(html)
     if not dados:
         return None                      # sinaliza falha de leitura
@@ -148,19 +235,19 @@ def extrair_anuncios(html):
     for no in percorrer(dados):
         if not isinstance(no, dict):
             continue
-        url = no.get("url")
+        url = no.get("url") or no.get("link")
         titulo = no.get("title") or no.get("name")
         if not isinstance(url, str) or not isinstance(titulo, str):
             continue
-        if len(titulo) < 8 or "/anuncio/" not in url:
+        if len(titulo) < 8 or marca not in url:
             continue
         if url in ja_visto:
             continue
         ja_visto.add(url)
 
-        ano, km, preco = ler_parametros(no)
+        ano, km, preco, combustivel, data = ler_parametros(no)
         if not url.startswith("http"):
-            url = "https://www.standvirtual.com" + url
+            url = base + url
 
         anuncios.append({
             "id": str(no.get("id") or url),
@@ -169,6 +256,9 @@ def extrair_anuncios(html):
             "ano": ano,
             "km": km,
             "preco": preco,
+            "combustivel": combustivel,
+            "data": data,
+            "site": site.get("nome", "Standvirtual"),
         })
     return anuncios
 
@@ -195,6 +285,15 @@ def avaliar(anuncio, bloco, cfg):
     if anuncio["km"] is not None and anuncio["km"] > bloco["km_max"]:
         return False, "km acima do maximo", []
 
+    # Escaloes so de gasoleo (Megane). Se o combustivel for desconhecido o
+    # anuncio passa na mesma — mais vale ver um a mais do que perder um bom.
+    if bloco.get("so_gasoleo"):
+        combustivel = sem_acentos(anuncio.get("combustivel") or "")
+        if combustivel and not any(p in combustivel for p in ("diesel", "gasoleo")):
+            return False, "nao e gasoleo", []
+        if not combustivel and not any(p in texto for p in ("dci", "diesel", "gasoleo")):
+            pass  # titulo sem indicacao: deixa passar e vai assinalado no email
+
     avisos = []
     for m in cfg.get("motores_alerta", []):
         if sem_acentos(m["termo"]) in texto and m["aviso"] not in avisos:
@@ -220,11 +319,14 @@ def montar_email(novos, cfg, cortados=0):
         )
         for a in itens:
             det = []
-            if a["ano"]:
-                det.append(str(a["ano"]))
+            det.append(str(a["ano"]) if a["ano"] else "ano ?")
             if a["km"]:
                 det.append(f"{a['km']:,}".replace(",", ".") + " km")
-            det.append(a["pesquisa"])
+            if a.get("combustivel"):
+                det.append(a["combustivel"])
+            if a.get("data"):
+                det.append("publicado " + formatar_data(a["data"]))
+            det.append(f'<b>{a.get("site", "?")}</b>')
 
             acima = a["preco"] and a["preco"] > teto
             nota_teto = (' <span style="color:#B26B00">· acima do teto, só com '
@@ -290,15 +392,21 @@ def main():
     # (a primeira execucao passou a enviar email tambem)
     novos = {nome: [] for nome in cfg["blocos"]}
     falhas_leitura = 0
+    balanco = {}
 
     sessao = requests.Session()
     sessao.headers.update(HEADERS)
 
     for pesquisa in cfg["pesquisas"]:
-        nome_bloco = pesquisa["bloco"]
-        bloco = cfg["blocos"].get(nome_bloco)
-        if not bloco:
-            print(f"!! Bloco desconhecido em «{pesquisa['nome']}»: {nome_bloco}")
+        # Uma pesquisa pode alimentar varios escaloes (o Megane alimenta o 4A
+        # e o 4B). Cada anuncio fica no PRIMEIRO escalao cujos criterios cumpra.
+        nomes_bloco = pesquisa.get("blocos") or [pesquisa.get("bloco")]
+        nomes_bloco = [n for n in nomes_bloco if n]
+        desconhecidos = [n for n in nomes_bloco if n not in cfg["blocos"]]
+        if desconhecidos:
+            print(f"!! Escalao desconhecido em «{pesquisa['nome']}»: {desconhecidos}")
+        nomes_bloco = [n for n in nomes_bloco if n in cfg["blocos"]]
+        if not nomes_bloco:
             continue
 
         try:
@@ -309,10 +417,14 @@ def main():
             time.sleep(PAUSA)
             continue
 
-        anuncios = extrair_anuncios(resposta.text)
+        nome_site = pesquisa.get("site", "Standvirtual")
+        site = dict(cfg.get("sites", {}).get(nome_site, {}), nome=nome_site)
+        anuncios = extrair_anuncios(resposta.text, site)
         if anuncios is None:
             falhas_leitura += 1
-            print(f"   {pesquisa['nome']}: nao encontrei os dados na pagina")
+            balanco.setdefault(nome_site, {"lidos": 0, "novos": 0, "falhas": 0})
+            balanco[nome_site]["falhas"] += 1
+            print(f"   [{nome_site}] {pesquisa['nome']}: nao encontrei os dados na pagina")
             time.sleep(PAUSA)
             continue
 
@@ -321,15 +433,26 @@ def main():
             if a["id"] in vistos:
                 continue
             vistos.add(a["id"])
-            ok, _motivo, avisos = avaliar(a, bloco, cfg)
-            if ok:
-                a["avisos"] = avisos
-                a["pesquisa"] = pesquisa["nome"]
-                novos[nome_bloco].append(a)
-                aceites += 1
+            for nome_bloco in nomes_bloco:
+                ok, _motivo, avisos = avaliar(a, cfg["blocos"][nome_bloco], cfg)
+                if ok:
+                    a["avisos"] = avisos
+                    a["pesquisa"] = pesquisa["nome"]
+                    novos[nome_bloco].append(a)
+                    aceites += 1
+                    break
 
-        print(f"   {pesquisa['nome']}: {len(anuncios)} lidos, {aceites} novos")
+        balanco.setdefault(nome_site, {"lidos": 0, "novos": 0, "falhas": 0})
+        balanco[nome_site]["lidos"] += len(anuncios)
+        balanco[nome_site]["novos"] += aceites
+        print(f"   [{nome_site}] {pesquisa['nome']}: {len(anuncios)} lidos, {aceites} novos")
         time.sleep(PAUSA)
+
+    print("\n--- BALANCO POR SITE ---")
+    for nome_site, b in balanco.items():
+        estado = "OK" if b["lidos"] else "NAO LEU NADA — estrutura por decifrar"
+        print(f"   {nome_site:<14} {b['lidos']:>4} lidos · {b['novos']:>3} novos · "
+              f"{b['falhas']} paginas ilegiveis   {estado}")
 
     for nome in novos:
         novos[nome].sort(key=lambda x: x["preco"] or 0)

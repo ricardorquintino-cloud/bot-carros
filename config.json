@@ -1,12 +1,37 @@
 {
   "_comentario": "Edita só este ficheiro. Cada pesquisa é um endereço copiado da barra do browser depois de fazeres a pesquisa no site com os filtros postos.",
 
+  "max_por_email": 80,
+  "preco_minimo_absoluto": 400,
+
+  "_sites": "Como reconhecer um anuncio em cada site. 'marca_url' e o pedaco que aparece no endereco de qualquer anuncio desse site.",
+  "sites": {
+    "Standvirtual": {
+      "marca_url": "/anuncio/",
+      "base": "https://www.standvirtual.com"
+    },
+    "OLX": {
+      "marca_url": "/d/anuncio/",
+      "base": "https://www.olx.pt"
+    },
+    "AutoSAPO": {
+      "marca_url": "/viatura",
+      "base": "https://auto.sapo.pt"
+    }
+  },
+
   "blocos": {
-    "1 — Toyota": {
+    "1A — Toyota recente": {
       "ano_min": 2010,
       "km_max": 175000,
       "preco_max": 5000,
       "preco_filtro": 5500
+    },
+    "1B — Toyota km alto": {
+      "ano_min": 2005,
+      "km_max": 250000,
+      "preco_max": 3500,
+      "preco_filtro": 4000
     },
     "2 — Citadinos": {
       "ano_min": 2010,
@@ -20,15 +45,21 @@
       "preco_max": 6000,
       "preco_filtro": 6500
     },
-    "4 — Renault Mégane": {
+    "4A — Mégane recente": {
       "ano_min": 2014,
       "km_max": 175000,
       "preco_max": 5500,
-      "preco_filtro": 6000
+      "preco_filtro": 6000,
+      "so_gasoleo": true
+    },
+    "4B — Mégane km alto": {
+      "ano_min": 2010,
+      "km_max": 200000,
+      "preco_max": 4000,
+      "preco_filtro": 4500,
+      "so_gasoleo": true
     }
   },
-
-  "preco_minimo_absoluto": 400,
 
   "excluir": [
     "hibrido", "híbrido", "hybrid", "eletrico", "elétrico", "electrico",
@@ -42,13 +73,19 @@
     { "termo": "powershift", "aviso": "PowerShift — dupla embraiagem a seco" },
     { "termo": "edc", "aviso": "Renault EDC — mecatrónica" },
     { "termo": "automatica", "aviso": "Caixa automática — confirmar histórico de óleo" },
-    { "termo": "automática", "aviso": "Caixa automática — confirmar histórico de óleo" }
+    { "termo": "automática", "aviso": "Caixa automática — confirmar histórico de óleo" },
+    { "termo": "d-4d", "aviso": "D-4D — vigiar EGR, FAP e volante bimassa" },
+    { "termo": "dci", "aviso": "dCi — injetores e turbo são o ponto fraco acima dos 150.000 km" }
   ],
 
   "pesquisas": [
-    { "bloco": "1 — Toyota", "nome": "Toyota Yaris", "url": "https://www.standvirtual.com/carros/toyota/yaris" },
-    { "bloco": "1 — Toyota", "nome": "Toyota Auris", "url": "https://www.standvirtual.com/carros/toyota/auris" },
-    { "bloco": "1 — Toyota", "nome": "Toyota Aygo", "url": "https://www.standvirtual.com/carros/toyota/aygo" },
+    { "bloco": "1A — Toyota recente", "nome": "Toyota Yaris", "url": "https://www.standvirtual.com/carros/toyota/yaris" },
+    { "bloco": "1A — Toyota recente", "nome": "Toyota Auris", "url": "https://www.standvirtual.com/carros/toyota/auris" },
+    { "bloco": "1A — Toyota recente", "nome": "Toyota Aygo", "url": "https://www.standvirtual.com/carros/toyota/aygo" },
+
+    { "bloco": "1B — Toyota km alto", "nome": "Toyota Corolla", "url": "https://www.standvirtual.com/carros/toyota/corolla" },
+    { "bloco": "1B — Toyota km alto", "nome": "Toyota Avensis", "url": "https://www.standvirtual.com/carros/toyota/avensis" },
+    { "bloco": "1B — Toyota km alto", "nome": "Toyota Corolla Verso", "url": "https://www.standvirtual.com/carros/toyota/corolla-verso" },
 
     { "bloco": "2 — Citadinos", "nome": "Peugeot 107", "url": "https://www.standvirtual.com/carros/peugeot/107" },
     { "bloco": "2 — Citadinos", "nome": "Peugeot 108", "url": "https://www.standvirtual.com/carros/peugeot/108" },
@@ -70,6 +107,19 @@
 
     { "bloco": "3 — Ford Focus", "nome": "Ford Focus", "url": "https://www.standvirtual.com/carros/ford/focus" },
 
-    { "bloco": "4 — Renault Mégane", "nome": "Renault Megane", "url": "https://www.standvirtual.com/carros/renault/megane" }
+    { "blocos": ["4A — Mégane recente", "4B — Mégane km alto"], "nome": "Renault Megane", "url": "https://www.standvirtual.com/carros/renault/megane" },
+
+    { "_nota": "OLX e Auto SAPO — em teste. Se o registo disser que nao leram nada, a estrutura deles e diferente e eu ajusto.",
+      "bloco": "1A — Toyota recente", "site": "OLX", "nome": "Toyota Yaris", "url": "https://www.olx.pt/carros-motos-e-barcos/carros/q-toyota-yaris/" },
+    { "bloco": "1B — Toyota km alto", "site": "OLX", "nome": "Toyota Corolla", "url": "https://www.olx.pt/carros-motos-e-barcos/carros/q-toyota-corolla/" },
+    { "bloco": "1B — Toyota km alto", "site": "OLX", "nome": "Toyota Avensis", "url": "https://www.olx.pt/carros-motos-e-barcos/carros/q-toyota-avensis/" },
+    { "bloco": "3 — Ford Focus", "site": "OLX", "nome": "Ford Focus", "url": "https://www.olx.pt/carros-motos-e-barcos/carros/q-ford-focus/" },
+    { "blocos": ["4A — Mégane recente", "4B — Mégane km alto"], "site": "OLX", "nome": "Renault Megane", "url": "https://www.olx.pt/carros-motos-e-barcos/carros/q-renault-megane/" },
+    { "bloco": "2 — Citadinos", "site": "OLX", "nome": "Renault Clio", "url": "https://www.olx.pt/carros-motos-e-barcos/carros/q-renault-clio/" },
+
+    { "bloco": "1A — Toyota recente", "site": "AutoSAPO", "nome": "Toyota Yaris", "url": "https://auto.sapo.pt/carros/usados/toyota/yaris" },
+    { "bloco": "1B — Toyota km alto", "site": "AutoSAPO", "nome": "Toyota Corolla", "url": "https://auto.sapo.pt/carros/usados/toyota/corolla" },
+    { "bloco": "3 — Ford Focus", "site": "AutoSAPO", "nome": "Ford Focus", "url": "https://auto.sapo.pt/carros/usados/ford/focus" },
+    { "blocos": ["4A — Mégane recente", "4B — Mégane km alto"], "site": "AutoSAPO", "nome": "Renault Megane", "url": "https://auto.sapo.pt/carros/usados/renault/megane" }
   ]
 }
