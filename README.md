@@ -12,14 +12,14 @@ Seis escalões. **Sem híbridos e sem elétricos.**
 
 | Escalão | O que vigia | Ano mín. | Km máx. | Teto de compra |
 |---|---|---|---|---|
-| **1A** Toyota recente | Yaris, Auris, Aygo | 2010 | 175.000 | 2.750 € |
-| **1B** Toyota km alto | Corolla, Avensis, Corolla Verso | 2005 | 250.000 | 3.500 € |
-| **2** Citadinos | qualquer marca | 2010 | 175.000 | 3.000 € |
+| **1A** Toyota recente | Yaris, Auris, Aygo | 2010 | 175.000 | 4.000 € |
+| **1B** Toyota km alto | Corolla, Avensis + Yaris/Auris/Aygo antigos | 2005 | 250.000 | 3.500 € |
+| **2** Citadinos | qualquer marca | 2010 | 175.000 | 4.000 € |
 | **3** Ford Focus | berlina e SW | 2012 | 175.000 | 6.000 € |
 | **4A** Mégane recente | berlina e ST, só gasóleo | 2014 | 175.000 | 5.500 € |
 | **4B** Mégane km alto | berlina e ST, só gasóleo | 2010 | 200.000 | 4.000 € |
 
-> O 1B tem teto mais alto que o 1A de propósito: Corolla e Avensis são familiares de gama média, não citadinos, e valem mais mesmo com mais anos e quilómetros.
+> As pesquisas Toyota alimentam os dois escalões: o carro é testado primeiro no 1A e, se não couber por anos ou quilómetros, cai no 1B.
 
 O bot procura um pouco acima de cada teto e **marca no email** os que ficaram acima, para veres se dá para negociar para dentro do limite.
 

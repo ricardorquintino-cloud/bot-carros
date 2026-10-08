@@ -19,8 +19,8 @@
     "1A — Toyota recente": {
       "ano_min": 2010,
       "km_max": 175000,
-      "preco_max": 2750,
-      "preco_filtro": 3000
+      "preco_max": 4000,
+      "preco_filtro": 4500
     },
     "1B — Toyota km alto": {
       "ano_min": 2005,
@@ -31,8 +31,8 @@
     "2 — Citadinos": {
       "ano_min": 2010,
       "km_max": 175000,
-      "preco_max": 3000,
-      "preco_filtro": 3500
+      "preco_max": 4000,
+      "preco_filtro": 4500
     },
     "3 — Ford Focus": {
       "ano_min": 2012,
@@ -108,40 +108,55 @@
   ],
   "pesquisas": [
     {
-      "bloco": "1A — Toyota recente",
       "nome": "Toyota Yaris",
       "url": "https://www.standvirtual.com/carros/toyota/yaris?search%5Bprivate_business%5D=private",
-      "paginas": 2
+      "paginas": 2,
+      "blocos": [
+        "1A — Toyota recente",
+        "1B — Toyota km alto"
+      ]
     },
     {
-      "bloco": "1A — Toyota recente",
       "nome": "Toyota Auris",
       "url": "https://www.standvirtual.com/carros/toyota/auris?search%5Bprivate_business%5D=private",
-      "paginas": 2
+      "paginas": 2,
+      "blocos": [
+        "1A — Toyota recente",
+        "1B — Toyota km alto"
+      ]
     },
     {
-      "bloco": "1A — Toyota recente",
       "nome": "Toyota Aygo",
       "url": "https://www.standvirtual.com/carros/toyota/aygo?search%5Bprivate_business%5D=private",
-      "paginas": 2
+      "paginas": 2,
+      "blocos": [
+        "1A — Toyota recente",
+        "1B — Toyota km alto"
+      ]
     },
     {
-      "bloco": "1B — Toyota km alto",
       "nome": "Toyota Corolla",
       "url": "https://www.standvirtual.com/carros/toyota/corolla?search%5Bprivate_business%5D=private",
-      "paginas": 2
+      "paginas": 2,
+      "blocos": [
+        "1B — Toyota km alto"
+      ]
     },
     {
-      "bloco": "1B — Toyota km alto",
       "nome": "Toyota Avensis",
       "url": "https://www.standvirtual.com/carros/toyota/avensis?search%5Bprivate_business%5D=private",
-      "paginas": 2
+      "paginas": 2,
+      "blocos": [
+        "1B — Toyota km alto"
+      ]
     },
     {
-      "bloco": "1B — Toyota km alto",
       "nome": "Toyota Corolla Verso",
       "url": "https://www.standvirtual.com/carros/toyota/corolla-verso?search%5Bprivate_business%5D=private",
-      "paginas": 2
+      "paginas": 2,
+      "blocos": [
+        "1B — Toyota km alto"
+      ]
     },
     {
       "bloco": "2 — Citadinos",
@@ -261,26 +276,13 @@
       "paginas": 2
     },
     {
-      "bloco": "1A — Toyota recente",
       "site": "AutoSAPO",
-      "nome": "Toyota recente",
-      "url": "https://auto.sapo.pt/carros-usados?marca=toyota&ano-min=2010&preco-max=3000&km-max=175000",
+      "nome": "Toyota",
+      "url": "https://auto.sapo.pt/carros-usados?marca=toyota&ano-min=2005&preco-max=4500&km-max=250000",
       "paginas": 3,
-      "modelos": [
-        "yaris",
-        "auris",
-        "aygo"
-      ]
-    },
-    {
-      "bloco": "1B — Toyota km alto",
-      "site": "AutoSAPO",
-      "nome": "Toyota km alto",
-      "url": "https://auto.sapo.pt/carros-usados?marca=toyota&ano-min=2005&preco-max=4000&km-max=250000",
-      "paginas": 3,
-      "modelos": [
-        "corolla",
-        "avensis"
+      "blocos": [
+        "1A — Toyota recente",
+        "1B — Toyota km alto"
       ]
     },
     {
@@ -311,7 +313,7 @@
       "bloco": "2 — Citadinos",
       "site": "AutoSAPO",
       "nome": "Peugeot citadinos",
-      "url": "https://auto.sapo.pt/carros-usados?marca=peugeot&ano-min=2010&preco-max=3500&km-max=175000",
+      "url": "https://auto.sapo.pt/carros-usados?marca=peugeot&ano-min=2010&preco-max=4500&km-max=175000",
       "paginas": 3,
       "modelos": [
         "107",
@@ -325,7 +327,7 @@
       "bloco": "2 — Citadinos",
       "site": "AutoSAPO",
       "nome": "Citroen citadinos",
-      "url": "https://auto.sapo.pt/carros-usados?marca=citroen&ano-min=2010&preco-max=3500&km-max=175000",
+      "url": "https://auto.sapo.pt/carros-usados?marca=citroen&ano-min=2010&preco-max=4500&km-max=175000",
       "paginas": 3,
       "modelos": [
         "c1",
@@ -336,7 +338,7 @@
       "bloco": "2 — Citadinos",
       "site": "AutoSAPO",
       "nome": "Renault citadinos",
-      "url": "https://auto.sapo.pt/carros-usados?marca=renault&ano-min=2010&preco-max=3500&km-max=175000",
+      "url": "https://auto.sapo.pt/carros-usados?marca=renault&ano-min=2010&preco-max=4500&km-max=175000",
       "paginas": 3,
       "modelos": [
         "clio",
@@ -347,7 +349,7 @@
       "bloco": "2 — Citadinos",
       "site": "AutoSAPO",
       "nome": "Opel/Ford/Fiat citadinos",
-      "url": "https://auto.sapo.pt/carros-usados?marca=opel&ano-min=2010&preco-max=3500&km-max=175000",
+      "url": "https://auto.sapo.pt/carros-usados?marca=opel&ano-min=2010&preco-max=4500&km-max=175000",
       "paginas": 3,
       "modelos": [
         "corsa"
@@ -357,7 +359,7 @@
       "bloco": "2 — Citadinos",
       "site": "AutoSAPO",
       "nome": "VW/Seat/Skoda citadinos",
-      "url": "https://auto.sapo.pt/carros-usados?marca=volkswagen&ano-min=2010&preco-max=3500&km-max=175000",
+      "url": "https://auto.sapo.pt/carros-usados?marca=volkswagen&ano-min=2010&preco-max=4500&km-max=175000",
       "paginas": 3,
       "modelos": [
         "polo"
