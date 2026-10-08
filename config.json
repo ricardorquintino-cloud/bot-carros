@@ -10,12 +10,8 @@
       "marca_url": "/anuncio/",
       "base": "https://www.standvirtual.com"
     },
-    "OLX": {
-      "marca_url": "/d/anuncio/",
-      "base": "https://www.olx.pt"
-    },
     "AutoSAPO": {
-      "marca_url": "/viatura",
+      "marca_url": "/carro-usado/",
       "base": "https://auto.sapo.pt"
     }
   },
@@ -109,17 +105,29 @@
 
     { "blocos": ["4A — Mégane recente", "4B — Mégane km alto"], "nome": "Renault Megane", "url": "https://www.standvirtual.com/carros/renault/megane" },
 
-    { "_nota": "OLX e Auto SAPO — em teste. Se o registo disser que nao leram nada, a estrutura deles e diferente e eu ajusto.",
-      "bloco": "1A — Toyota recente", "site": "OLX", "nome": "Toyota Yaris", "url": "https://www.olx.pt/carros-motos-e-barcos/carros/q-toyota-yaris/" },
-    { "bloco": "1B — Toyota km alto", "site": "OLX", "nome": "Toyota Corolla", "url": "https://www.olx.pt/carros-motos-e-barcos/carros/q-toyota-corolla/" },
-    { "bloco": "1B — Toyota km alto", "site": "OLX", "nome": "Toyota Avensis", "url": "https://www.olx.pt/carros-motos-e-barcos/carros/q-toyota-avensis/" },
-    { "bloco": "3 — Ford Focus", "site": "OLX", "nome": "Ford Focus", "url": "https://www.olx.pt/carros-motos-e-barcos/carros/q-ford-focus/" },
-    { "blocos": ["4A — Mégane recente", "4B — Mégane km alto"], "site": "OLX", "nome": "Renault Megane", "url": "https://www.olx.pt/carros-motos-e-barcos/carros/q-renault-megane/" },
-    { "bloco": "2 — Citadinos", "site": "OLX", "nome": "Renault Clio", "url": "https://www.olx.pt/carros-motos-e-barcos/carros/q-renault-clio/" },
-
-    { "bloco": "1A — Toyota recente", "site": "AutoSAPO", "nome": "Toyota Yaris", "url": "https://auto.sapo.pt/carros/usados/toyota/yaris" },
-    { "bloco": "1B — Toyota km alto", "site": "AutoSAPO", "nome": "Toyota Corolla", "url": "https://auto.sapo.pt/carros/usados/toyota/corolla" },
-    { "bloco": "3 — Ford Focus", "site": "AutoSAPO", "nome": "Ford Focus", "url": "https://auto.sapo.pt/carros/usados/ford/focus" },
-    { "blocos": ["4A — Mégane recente", "4B — Mégane km alto"], "site": "AutoSAPO", "nome": "Renault Megane", "url": "https://auto.sapo.pt/carros/usados/renault/megane" }
+    { "_nota": "Auto SAPO nao tem paginas por modelo: as paginas sao por MARCA e trazem tudo junto. Por isso cada pesquisa leva a lista de modelos que conta para cada escalao.",
+      "blocos": ["1A — Toyota recente", "1B — Toyota km alto"],
+      "site": "AutoSAPO", "nome": "Toyota (marca)",
+      "url": "https://auto.sapo.pt/carros/toyota.html",
+      "modelos_por_bloco": {
+        "1A — Toyota recente": ["yaris", "auris", "aygo"],
+        "1B — Toyota km alto": ["corolla", "avensis"]
+      } },
+    { "bloco": "3 — Ford Focus", "site": "AutoSAPO", "nome": "Ford (marca)",
+      "url": "https://auto.sapo.pt/carros/ford.html",
+      "modelos": ["focus"] },
+    { "blocos": ["4A — Mégane recente", "4B — Mégane km alto"],
+      "site": "AutoSAPO", "nome": "Renault (marca)",
+      "url": "https://auto.sapo.pt/carros/renault.html",
+      "modelos": ["megane", "mégane"] },
+    { "bloco": "2 — Citadinos", "site": "AutoSAPO", "nome": "Peugeot (marca)",
+      "url": "https://auto.sapo.pt/carros/peugeot.html",
+      "modelos": ["107", "108", "206", "207", "208"] },
+    { "bloco": "2 — Citadinos", "site": "AutoSAPO", "nome": "Citroen (marca)",
+      "url": "https://auto.sapo.pt/carros/citroen.html",
+      "modelos": ["c1", "c3"] },
+    { "bloco": "2 — Citadinos", "site": "AutoSAPO", "nome": "Opel (marca)",
+      "url": "https://auto.sapo.pt/carros/opel.html",
+      "modelos": ["corsa"] }
   ]
 }

@@ -434,6 +434,14 @@ def main():
                 continue
             vistos.add(a["id"])
             for nome_bloco in nomes_bloco:
+                # Paginas de marca (Auto SAPO) trazem todos os modelos juntos.
+                # `modelos` limita quais contam para este escalao.
+                modelos = (pesquisa.get("modelos_por_bloco", {}).get(nome_bloco)
+                           or pesquisa.get("modelos"))
+                if modelos:
+                    titulo = sem_acentos(a["titulo"])
+                    if not any(sem_acentos(mod) in titulo for mod in modelos):
+                        continue
                 ok, _motivo, avisos = avaliar(a, cfg["blocos"][nome_bloco], cfg)
                 if ok:
                     a["avisos"] = avisos
