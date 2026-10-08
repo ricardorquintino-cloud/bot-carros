@@ -203,7 +203,7 @@ def avaliar(anuncio, bloco, cfg):
 
 
 # ------------------------------------------------------------------ email
-def montar_email(novos, cfg):
+def montar_email(novos, cfg, cortados=0):
     total = sum(len(v) for v in novos.values())
     p = ['<html><body style="font-family:Arial,Helvetica,sans-serif;font-size:14px">',
          f'<h2 style="margin:0 0 4px">{total} anúncios novos</h2>',
@@ -240,6 +240,13 @@ def montar_email(novos, cfg):
             for aviso in a["avisos"]:
                 p.append(f'<br><span style="color:#C00000">⚠ {aviso}</span>')
             p.append("</p>")
+
+    if cortados:
+        p.append(
+            f'<p style="color:#B26B00;margin:18px 0 0">Mais {cortados} anúncios '
+            f'passaram os filtros mas ficaram de fora deste email. Vão aparecer '
+            f'os mais baratos de cada bloco; o resto vê-se no site.</p>'
+        )
 
     p.append(
         '<hr style="border:none;border-top:1px solid #ddd;margin:22px 0 10px">'
@@ -280,7 +287,7 @@ def main():
         sys.exit("config.json em falta ou invalido.")
 
     vistos = set(carregar_json(SEEN_FILE, []))
-    primeira_vez = not vistos
+    # (a primeira execucao passou a enviar email tambem)
     novos = {nome: [] for nome in cfg["blocos"]}
     falhas_leitura = 0
 
@@ -333,12 +340,23 @@ def main():
     if falhas_leitura == len(cfg["pesquisas"]):
         print("!! Nenhuma pagina foi lida. O site mudou de estrutura.")
 
-    if total and not primeira_vez:
-        if enviar_email(montar_email(novos, cfg), total):
-            print("Email enviado.")
-    elif total and primeira_vez:
-        print("Primeira execucao: memorizados sem enviar email, para nao "
-              "receberes centenas de anuncios de uma vez.")
+    if total:
+        # Trava de seguranca: se por algum motivo aparecerem centenas de
+        # anuncios de uma vez, manda os mais baratos de cada bloco e diz
+        # quantos ficaram de fora, em vez de um email interminavel.
+        limite = cfg.get("max_por_email", 80)
+        cortados = 0
+        if total > limite:
+            por_bloco = max(5, limite // max(1, len([v for v in novos.values() if v])))
+            for nome, itens in novos.items():
+                if len(itens) > por_bloco:
+                    cortados += len(itens) - por_bloco
+                    novos[nome] = itens[:por_bloco]
+            print(f"Lista grande: {cortados} anuncios ficaram de fora do email.")
+
+        enviados = sum(len(v) for v in novos.values())
+        if enviar_email(montar_email(novos, cfg, cortados), enviados):
+            print(f"Email enviado com {enviados} anuncios.")
     else:
         print("Nada novo — email nao enviado.")
 
