@@ -239,7 +239,7 @@
       "site": "AutoSAPO",
       "nome": "Toyota recente",
       "url": "https://auto.sapo.pt/carros-usados?marca=toyota&ano-min=2010&preco-max=5500&km-max=175000",
-      "paginas": 4,
+      "paginas": 3,
       "modelos": [
         "yaris",
         "auris",
@@ -251,7 +251,7 @@
       "site": "AutoSAPO",
       "nome": "Toyota km alto",
       "url": "https://auto.sapo.pt/carros-usados?marca=toyota&ano-min=2005&preco-max=4000&km-max=250000",
-      "paginas": 4,
+      "paginas": 3,
       "modelos": [
         "corolla",
         "avensis"
@@ -262,7 +262,7 @@
       "site": "AutoSAPO",
       "nome": "Ford Focus",
       "url": "https://auto.sapo.pt/carros-usados?marca=ford&ano-min=2012&preco-max=6500&km-max=175000",
-      "paginas": 4,
+      "paginas": 3,
       "modelos": [
         "focus"
       ]
@@ -275,7 +275,7 @@
       "site": "AutoSAPO",
       "nome": "Renault Megane",
       "url": "https://auto.sapo.pt/carros-usados?marca=renault&ano-min=2010&preco-max=6000&km-max=200000",
-      "paginas": 4,
+      "paginas": 3,
       "modelos": [
         "megane",
         "mégane"

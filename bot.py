@@ -542,6 +542,12 @@ def main():
                 url += sufixo.replace("?", "&", 1) if "?" in url else sufixo
             try:
                 resposta = sessao.get(url, timeout=TIMEOUT)
+                # O Auto SAPO responde 404 quando a pesquisa nao da resultados
+                # ou quando a pagina nao existe. Nao e avaria: e o fim da lista.
+                if resposta.status_code == 404:
+                    falhou_tudo = False
+                    time.sleep(PAUSA)
+                    break
                 resposta.raise_for_status()
             except requests.RequestException as erro:
                 print(f"   [{nome_site}] {pesquisa['nome']} p{numero}: falhou o pedido — {erro}")
@@ -554,19 +560,18 @@ def main():
                 lote = extrair_anuncios_html(resposta.text, site)
             if lote:
                 anuncios.extend(lote)
+            else:
+                time.sleep(PAUSA)
+                break          # pagina sem anuncios: nao vale a pena continuar
             time.sleep(PAUSA)
 
         if falhou_tudo:
             continue
-        if not anuncios:
-            anuncios = None
 
-        if anuncios is None:
-            falhas_leitura += 1
+        if not anuncios:
+            # Chegou a pagina, mas sem anuncios: pesquisa sem resultados.
             balanco.setdefault(nome_site, {"lidos": 0, "novos": 0, "falhas": 0})
-            balanco[nome_site]["falhas"] += 1
-            print(f"   [{nome_site}] {pesquisa['nome']}: nao encontrei os dados na pagina")
-            time.sleep(PAUSA)
+            print(f"   [{nome_site}] {pesquisa['nome']}: 0 anuncios (pesquisa sem resultados)")
             continue
 
         aceites = 0
