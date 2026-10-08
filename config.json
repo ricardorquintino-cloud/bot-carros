@@ -6,7 +6,8 @@
   "sites": {
     "Standvirtual": {
       "marca_url": "/anuncio/",
-      "base": "https://www.standvirtual.com"
+      "base": "https://www.standvirtual.com",
+      "pagina_param": "?page={n}"
     },
     "AutoSAPO": {
       "marca_url": "/carro-usado/",
@@ -18,8 +19,8 @@
     "1A — Toyota recente": {
       "ano_min": 2010,
       "km_max": 175000,
-      "preco_max": 5000,
-      "preco_filtro": 5500
+      "preco_max": 2750,
+      "preco_filtro": 3000
     },
     "1B — Toyota km alto": {
       "ano_min": 2005,
@@ -109,122 +110,146 @@
     {
       "bloco": "1A — Toyota recente",
       "nome": "Toyota Yaris",
-      "url": "https://www.standvirtual.com/carros/toyota/yaris"
+      "url": "https://www.standvirtual.com/carros/toyota/yaris?search%5Bprivate_business%5D=private",
+      "paginas": 2
     },
     {
       "bloco": "1A — Toyota recente",
       "nome": "Toyota Auris",
-      "url": "https://www.standvirtual.com/carros/toyota/auris"
+      "url": "https://www.standvirtual.com/carros/toyota/auris?search%5Bprivate_business%5D=private",
+      "paginas": 2
     },
     {
       "bloco": "1A — Toyota recente",
       "nome": "Toyota Aygo",
-      "url": "https://www.standvirtual.com/carros/toyota/aygo"
+      "url": "https://www.standvirtual.com/carros/toyota/aygo?search%5Bprivate_business%5D=private",
+      "paginas": 2
     },
     {
       "bloco": "1B — Toyota km alto",
       "nome": "Toyota Corolla",
-      "url": "https://www.standvirtual.com/carros/toyota/corolla"
+      "url": "https://www.standvirtual.com/carros/toyota/corolla?search%5Bprivate_business%5D=private",
+      "paginas": 2
     },
     {
       "bloco": "1B — Toyota km alto",
       "nome": "Toyota Avensis",
-      "url": "https://www.standvirtual.com/carros/toyota/avensis"
+      "url": "https://www.standvirtual.com/carros/toyota/avensis?search%5Bprivate_business%5D=private",
+      "paginas": 2
     },
     {
       "bloco": "1B — Toyota km alto",
       "nome": "Toyota Corolla Verso",
-      "url": "https://www.standvirtual.com/carros/toyota/corolla-verso"
+      "url": "https://www.standvirtual.com/carros/toyota/corolla-verso?search%5Bprivate_business%5D=private",
+      "paginas": 2
     },
     {
       "bloco": "2 — Citadinos",
       "nome": "Peugeot 107",
-      "url": "https://www.standvirtual.com/carros/peugeot/107"
+      "url": "https://www.standvirtual.com/carros/peugeot/107?search%5Bprivate_business%5D=private",
+      "paginas": 2
     },
     {
       "bloco": "2 — Citadinos",
       "nome": "Peugeot 108",
-      "url": "https://www.standvirtual.com/carros/peugeot/108"
+      "url": "https://www.standvirtual.com/carros/peugeot/108?search%5Bprivate_business%5D=private",
+      "paginas": 2
     },
     {
       "bloco": "2 — Citadinos",
       "nome": "Citroen C1",
-      "url": "https://www.standvirtual.com/carros/citroen/c1"
+      "url": "https://www.standvirtual.com/carros/citroen/c1?search%5Bprivate_business%5D=private",
+      "paginas": 2
     },
     {
       "bloco": "2 — Citadinos",
       "nome": "Renault Clio",
-      "url": "https://www.standvirtual.com/carros/renault/clio"
+      "url": "https://www.standvirtual.com/carros/renault/clio?search%5Bprivate_business%5D=private",
+      "paginas": 2
     },
     {
       "bloco": "2 — Citadinos",
       "nome": "Renault Twingo",
-      "url": "https://www.standvirtual.com/carros/renault/twingo"
+      "url": "https://www.standvirtual.com/carros/renault/twingo?search%5Bprivate_business%5D=private",
+      "paginas": 2
     },
     {
       "bloco": "2 — Citadinos",
       "nome": "Peugeot 207",
-      "url": "https://www.standvirtual.com/carros/peugeot/207"
+      "url": "https://www.standvirtual.com/carros/peugeot/207?search%5Bprivate_business%5D=private",
+      "paginas": 2
     },
     {
       "bloco": "2 — Citadinos",
       "nome": "Peugeot 208",
-      "url": "https://www.standvirtual.com/carros/peugeot/208"
+      "url": "https://www.standvirtual.com/carros/peugeot/208?search%5Bprivate_business%5D=private",
+      "paginas": 2
     },
     {
       "bloco": "2 — Citadinos",
       "nome": "Citroen C3",
-      "url": "https://www.standvirtual.com/carros/citroen/c3"
+      "url": "https://www.standvirtual.com/carros/citroen/c3?search%5Bprivate_business%5D=private",
+      "paginas": 2
     },
     {
       "bloco": "2 — Citadinos",
       "nome": "Opel Corsa",
-      "url": "https://www.standvirtual.com/carros/opel/corsa"
+      "url": "https://www.standvirtual.com/carros/opel/corsa?search%5Bprivate_business%5D=private",
+      "paginas": 2
     },
     {
       "bloco": "2 — Citadinos",
       "nome": "Ford Ka",
-      "url": "https://www.standvirtual.com/carros/ford/ka"
+      "url": "https://www.standvirtual.com/carros/ford/ka?search%5Bprivate_business%5D=private",
+      "paginas": 2
     },
     {
       "bloco": "2 — Citadinos",
       "nome": "Fiat Panda",
-      "url": "https://www.standvirtual.com/carros/fiat/panda"
+      "url": "https://www.standvirtual.com/carros/fiat/panda?search%5Bprivate_business%5D=private",
+      "paginas": 2
     },
     {
       "bloco": "2 — Citadinos",
       "nome": "VW Polo",
-      "url": "https://www.standvirtual.com/carros/volkswagen/polo"
+      "url": "https://www.standvirtual.com/carros/volkswagen/polo?search%5Bprivate_business%5D=private",
+      "paginas": 2
     },
     {
       "bloco": "2 — Citadinos",
       "nome": "Seat Ibiza",
-      "url": "https://www.standvirtual.com/carros/seat/ibiza"
+      "url": "https://www.standvirtual.com/carros/seat/ibiza?search%5Bprivate_business%5D=private",
+      "paginas": 2
     },
     {
       "bloco": "2 — Citadinos",
       "nome": "Skoda Fabia",
-      "url": "https://www.standvirtual.com/carros/skoda/fabia"
+      "url": "https://www.standvirtual.com/carros/skoda/fabia?search%5Bprivate_business%5D=private",
+      "paginas": 2
     },
     {
       "bloco": "2 — Citadinos",
       "nome": "Nissan Micra",
-      "url": "https://www.standvirtual.com/carros/nissan/micra"
+      "url": "https://www.standvirtual.com/carros/nissan/micra?search%5Bprivate_business%5D=private",
+      "paginas": 2
     },
     {
       "bloco": "2 — Citadinos",
       "nome": "Hyundai i10",
-      "url": "https://www.standvirtual.com/carros/hyundai/i10"
+      "url": "https://www.standvirtual.com/carros/hyundai/i10?search%5Bprivate_business%5D=private",
+      "paginas": 2
     },
     {
       "bloco": "2 — Citadinos",
       "nome": "Kia Picanto",
-      "url": "https://www.standvirtual.com/carros/kia/picanto"
+      "url": "https://www.standvirtual.com/carros/kia/picanto?search%5Bprivate_business%5D=private",
+      "paginas": 2
     },
     {
       "bloco": "3 — Ford Focus",
       "nome": "Ford Focus",
-      "url": "https://www.standvirtual.com/carros/ford/focus"
+      "url": "https://www.standvirtual.com/carros/ford/focus?search%5Bprivate_business%5D=private",
+      "paginas": 2
     },
     {
       "blocos": [
@@ -232,13 +257,14 @@
         "4B — Mégane km alto"
       ],
       "nome": "Renault Megane",
-      "url": "https://www.standvirtual.com/carros/renault/megane"
+      "url": "https://www.standvirtual.com/carros/renault/megane?search%5Bprivate_business%5D=private",
+      "paginas": 2
     },
     {
       "bloco": "1A — Toyota recente",
       "site": "AutoSAPO",
       "nome": "Toyota recente",
-      "url": "https://auto.sapo.pt/carros-usados?marca=toyota&ano-min=2010&preco-max=5500&km-max=175000",
+      "url": "https://auto.sapo.pt/carros-usados?marca=toyota&ano-min=2010&preco-max=3000&km-max=175000",
       "paginas": 3,
       "modelos": [
         "yaris",

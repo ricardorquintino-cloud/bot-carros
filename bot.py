@@ -247,19 +247,33 @@ def limpar_tags(fragmento):
     return re.sub(r"\s+", " ", texto).strip()
 
 
+def padrao_anuncio(site):
+    """
+    Devolve uma funcao que diz se um endereco e de um anuncio.
+    A maioria dos sites tem um pedaco fixo no endereco («/anuncio/»), mas o
+    CustoJusto nao: os anuncios distinguem-se por terminarem no numero do
+    anuncio. Por isso aceita-se tambem uma expressao em `padrao_url`.
+    """
+    expressao = site.get("padrao_url")
+    if expressao:
+        compilado = re.compile(expressao, re.IGNORECASE)
+        return lambda url: bool(compilado.search(url or ""))
+    marca = site.get("marca_url", "/anuncio/")
+    return lambda url: marca in (url or "")
+
+
 def extrair_anuncios_html(html, site):
     """
     Leitor para sites que nao guardam os anuncios em JSON — o Auto SAPO
     serve-os em HTML normal. Encontra as ligacoes para anuncios e le o
     bloco de texto de cada cartao: ano, km, combustivel e preco.
     """
-    marca = site.get("marca_url", "/anuncio/")
     base = site.get("base", "")
+    reconhece = padrao_anuncio(site)
 
-    padrao = re.compile(
-        r'<a\b[^>]*href=["\']([^"\']*' + re.escape(marca) + r'[^"\']*)["\']',
-        re.IGNORECASE)
-    posicoes = [(m.start(), m.group(1)) for m in padrao.finditer(html)]
+    padrao = re.compile(r'<a\b[^>]*href=["\']([^"\']+)["\']', re.IGNORECASE)
+    posicoes = [(m.start(), m.group(1)) for m in padrao.finditer(html)
+                if reconhece(m.group(1))]
     if not posicoes:
         return []
 
@@ -341,8 +355,8 @@ def extrair_anuncios(html, site=None):
     enderecos relativos. Sem `site`, assume Standvirtual.
     """
     site = site or {}
-    marca = site.get("marca_url", "/anuncio/")
     base = site.get("base", "https://www.standvirtual.com")
+    reconhece = padrao_anuncio(site)
 
     dados = extrair_next_data(html)
     if not dados:
@@ -356,7 +370,7 @@ def extrair_anuncios(html, site=None):
         titulo = no.get("title") or no.get("name")
         if not isinstance(url, str) or not isinstance(titulo, str):
             continue
-        if len(titulo) < 8 or marca not in url:
+        if len(titulo) < 8 or not reconhece(url):
             continue
         if url in ja_visto:
             continue
