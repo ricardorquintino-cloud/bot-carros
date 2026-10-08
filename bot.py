@@ -217,6 +217,123 @@ def ler_parametros(no):
     return ano, km, preco, combustivel, data
 
 
+def juntar_milhares(palavras, i):
+    """
+    Le o numero que esta na posicao i, juntando os milhares quando vem
+    separado por espaco: «142 000» conta como 142000, mas «2013 142.000»
+    nao se junta, porque 2013 nao e um grupo de milhares valido.
+    """
+    if i < 0 or i >= len(palavras):
+        return None
+    atual = palavras[i].strip(".,;:()").replace(" ", "")
+    if not re.fullmatch(r"\d{1,3}(?:\.\d{3})*|\d{1,7}", atual):
+        return None
+    valor = int(atual.replace(".", ""))
+
+    # «142 000 km»: o bloco anterior so se junta se este tiver 3 digitos
+    if i >= 1 and re.fullmatch(r"\d{3}", atual):
+        antes = palavras[i - 1].strip(".,;:()")
+        if re.fullmatch(r"\d{1,3}", antes):
+            valor = int(antes) * 1000 + valor
+    return valor
+
+
+def limpar_tags(fragmento):
+    texto = re.sub(r"<script.*?</script>", " ", fragmento, flags=re.DOTALL | re.I)
+    texto = re.sub(r"<style.*?</style>", " ", texto, flags=re.DOTALL | re.I)
+    texto = re.sub(r"<[^>]+>", " ", texto)
+    texto = (texto.replace("&nbsp;", " ").replace("&amp;", "&")
+                  .replace("&euro;", "€").replace("&#8364;", "€"))
+    return re.sub(r"\s+", " ", texto).strip()
+
+
+def extrair_anuncios_html(html, site):
+    """
+    Leitor para sites que nao guardam os anuncios em JSON — o Auto SAPO
+    serve-os em HTML normal. Encontra as ligacoes para anuncios e le o
+    bloco de texto de cada cartao: ano, km, combustivel e preco.
+    """
+    marca = site.get("marca_url", "/anuncio/")
+    base = site.get("base", "")
+
+    padrao = re.compile(
+        r'<a\b[^>]*href=["\']([^"\']*' + re.escape(marca) + r'[^"\']*)["\']',
+        re.IGNORECASE)
+    posicoes = [(m.start(), m.group(1)) for m in padrao.finditer(html)]
+    if not posicoes:
+        return []
+
+    por_url = {}
+    for i, (inicio, href) in enumerate(posicoes):
+        fim = posicoes[i + 1][0] if i + 1 < len(posicoes) else min(inicio + 4000, len(html))
+        texto = limpar_tags(html[inicio:fim])
+
+        url = href if href.startswith("http") else base + href
+
+        # Leitura por palavras: evita colar o ano aos quilometros
+        # («2013 142.000 km» nao pode virar 13.142.000).
+        palavras = texto.replace("€", " € ").replace("km", " km ").split()
+
+        ano = km = preco = None
+        for i, palavra in enumerate(palavras):
+            limpa = palavra.strip(".,;:()")
+
+            if palavra == "km" and km is None:
+                numero = juntar_milhares(palavras, i - 1)
+                if numero is not None and 100 <= numero <= 999999:
+                    km = numero
+
+            elif palavra == "€" and preco is None:
+                numero = juntar_milhares(palavras, i - 1)
+                if numero is not None and 100 <= numero <= 500000:
+                    preco = numero
+
+            elif ano is None and re.fullmatch(r"(19[89]\d|20[0-4]\d)", limpa):
+                ano = int(limpa)
+
+        if preco is None:
+            m = re.search(r"([\d][\d . ]{2,12})€", texto)
+            if m:
+                preco = primeiro_numero(m.group(1))
+
+        m = re.search(r"(h[ií]brido[^,.;]*|diesel|gas[oó]leo|gasolina|el[ée]tric\w*)",
+                      texto, re.IGNORECASE)
+        combustivel = m.group(1).strip() if m else None
+
+        # titulo: o texto antes do ano, ou o fim do endereco
+        titulo = texto
+        if ano:
+            titulo = texto.split(str(ano))[0]
+        titulo = titulo.strip(" -|·,")
+        if len(titulo) < 6:
+            titulo = href.rstrip("/").split("/")[-1].replace("-", " ").title()
+
+        anterior = por_url.get(url)
+        if anterior:
+            # o mesmo anuncio aparece duas vezes (imagem e titulo): junta o melhor
+            for campo, valor in (("ano", ano), ("km", km), ("preco", preco),
+                                 ("combustivel", combustivel)):
+                if anterior.get(campo) is None and valor is not None:
+                    anterior[campo] = valor
+            if len(titulo) > len(anterior["titulo"]):
+                anterior["titulo"] = titulo[:120]
+            continue
+
+        por_url[url] = {
+            "id": url,
+            "titulo": titulo[:120],
+            "url": url,
+            "ano": ano,
+            "km": km,
+            "preco": preco,
+            "combustivel": combustivel,
+            "data": None,
+            "site": site.get("nome", "?"),
+        }
+
+    return list(por_url.values())
+
+
 def extrair_anuncios(html, site=None):
     """
     `site` diz como reconhecer um anuncio naquele site: `marca_url` e o pedaco
@@ -420,6 +537,11 @@ def main():
         nome_site = pesquisa.get("site", "Standvirtual")
         site = dict(cfg.get("sites", {}).get(nome_site, {}), nome=nome_site)
         anuncios = extrair_anuncios(resposta.text, site)
+
+        # Sem dados em JSON (ou JSON sem anuncios): tenta ler o HTML direto.
+        if not anuncios:
+            anuncios = extrair_anuncios_html(resposta.text, site) or anuncios
+
         if anuncios is None:
             falhas_leitura += 1
             balanco.setdefault(nome_site, {"lidos": 0, "novos": 0, "falhas": 0})
