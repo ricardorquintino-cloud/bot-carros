@@ -27,7 +27,7 @@ jobs:
           EMAIL_REMETENTE: ${{ secrets.EMAIL_REMETENTE }}
           EMAIL_PALAVRA_PASSE: ${{ secrets.EMAIL_PALAVRA_PASSE }}
           EMAIL_DESTINATARIO: ${{ secrets.EMAIL_DESTINATARIO }}
-        run: python bot.py
+        run: python diagnostico.py
 
       - name: Guardar anúncios já vistos
         run: |
