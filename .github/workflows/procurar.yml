@@ -1,0 +1,38 @@
+name: Procurar carros
+
+on:
+  schedule:
+    # 08:00, 14:00 e 20:00 em Portugal continental (UTC+1 no verão)
+    - cron: '0 7,13,19 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  procurar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Instalar dependências
+        run: pip install -r requirements.txt
+
+      - name: Correr o bot
+        env:
+          EMAIL_REMETENTE: ${{ secrets.EMAIL_REMETENTE }}
+          EMAIL_PALAVRA_PASSE: ${{ secrets.EMAIL_PALAVRA_PASSE }}
+          EMAIL_DESTINATARIO: ${{ secrets.EMAIL_DESTINATARIO }}
+        run: python bot.py
+
+      - name: Guardar anúncios já vistos
+        run: |
+          git config user.name "bot-carros"
+          git config user.email "bot@users.noreply.github.com"
+          git add seen.json
+          git diff --staged --quiet || git commit -m "Atualizar anúncios vistos"
+          git push
