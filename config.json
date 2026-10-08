@@ -1,0 +1,75 @@
+{
+  "_comentario": "Edita só este ficheiro. Cada pesquisa é um endereço copiado da barra do browser depois de fazeres a pesquisa no site com os filtros postos.",
+
+  "blocos": {
+    "1 — Toyota": {
+      "ano_min": 2010,
+      "km_max": 175000,
+      "preco_max": 5000,
+      "preco_filtro": 5500
+    },
+    "2 — Citadinos": {
+      "ano_min": 2010,
+      "km_max": 175000,
+      "preco_max": 3000,
+      "preco_filtro": 3500
+    },
+    "3 — Ford Focus": {
+      "ano_min": 2012,
+      "km_max": 175000,
+      "preco_max": 6000,
+      "preco_filtro": 6500
+    },
+    "4 — Renault Mégane": {
+      "ano_min": 2014,
+      "km_max": 175000,
+      "preco_max": 5500,
+      "preco_filtro": 6000
+    }
+  },
+
+  "preco_minimo_absoluto": 400,
+
+  "excluir": [
+    "hibrido", "híbrido", "hybrid", "eletrico", "elétrico", "electrico",
+    "para pecas", "para peças", "sinistrado", "acidentado", "salvado"
+  ],
+
+  "motores_alerta": [
+    { "termo": "puretech", "aviso": "PureTech — correia em banho de óleo" },
+    { "termo": "1.6 thp", "aviso": "1.6 THP — corrente e carbonização" },
+    { "termo": "ecoboost", "aviso": "EcoBoost 1.0 — correia húmida; só pós-2018" },
+    { "termo": "powershift", "aviso": "PowerShift — dupla embraiagem a seco" },
+    { "termo": "edc", "aviso": "Renault EDC — mecatrónica" },
+    { "termo": "automatica", "aviso": "Caixa automática — confirmar histórico de óleo" },
+    { "termo": "automática", "aviso": "Caixa automática — confirmar histórico de óleo" }
+  ],
+
+  "pesquisas": [
+    { "bloco": "1 — Toyota", "nome": "Toyota Yaris", "url": "https://www.standvirtual.com/carros/toyota/yaris" },
+    { "bloco": "1 — Toyota", "nome": "Toyota Auris", "url": "https://www.standvirtual.com/carros/toyota/auris" },
+    { "bloco": "1 — Toyota", "nome": "Toyota Aygo", "url": "https://www.standvirtual.com/carros/toyota/aygo" },
+
+    { "bloco": "2 — Citadinos", "nome": "Peugeot 107", "url": "https://www.standvirtual.com/carros/peugeot/107" },
+    { "bloco": "2 — Citadinos", "nome": "Peugeot 108", "url": "https://www.standvirtual.com/carros/peugeot/108" },
+    { "bloco": "2 — Citadinos", "nome": "Citroen C1", "url": "https://www.standvirtual.com/carros/citroen/c1" },
+    { "bloco": "2 — Citadinos", "nome": "Renault Clio", "url": "https://www.standvirtual.com/carros/renault/clio" },
+    { "bloco": "2 — Citadinos", "nome": "Renault Twingo", "url": "https://www.standvirtual.com/carros/renault/twingo" },
+    { "bloco": "2 — Citadinos", "nome": "Peugeot 207", "url": "https://www.standvirtual.com/carros/peugeot/207" },
+    { "bloco": "2 — Citadinos", "nome": "Peugeot 208", "url": "https://www.standvirtual.com/carros/peugeot/208" },
+    { "bloco": "2 — Citadinos", "nome": "Citroen C3", "url": "https://www.standvirtual.com/carros/citroen/c3" },
+    { "bloco": "2 — Citadinos", "nome": "Opel Corsa", "url": "https://www.standvirtual.com/carros/opel/corsa" },
+    { "bloco": "2 — Citadinos", "nome": "Ford Ka", "url": "https://www.standvirtual.com/carros/ford/ka" },
+    { "bloco": "2 — Citadinos", "nome": "Fiat Panda", "url": "https://www.standvirtual.com/carros/fiat/panda" },
+    { "bloco": "2 — Citadinos", "nome": "VW Polo", "url": "https://www.standvirtual.com/carros/volkswagen/polo" },
+    { "bloco": "2 — Citadinos", "nome": "Seat Ibiza", "url": "https://www.standvirtual.com/carros/seat/ibiza" },
+    { "bloco": "2 — Citadinos", "nome": "Skoda Fabia", "url": "https://www.standvirtual.com/carros/skoda/fabia" },
+    { "bloco": "2 — Citadinos", "nome": "Nissan Micra", "url": "https://www.standvirtual.com/carros/nissan/micra" },
+    { "bloco": "2 — Citadinos", "nome": "Hyundai i10", "url": "https://www.standvirtual.com/carros/hyundai/i10" },
+    { "bloco": "2 — Citadinos", "nome": "Kia Picanto", "url": "https://www.standvirtual.com/carros/kia/picanto" },
+
+    { "bloco": "3 — Ford Focus", "nome": "Ford Focus", "url": "https://www.standvirtual.com/carros/ford/focus" },
+
+    { "bloco": "4 — Renault Mégane", "nome": "Renault Megane", "url": "https://www.standvirtual.com/carros/renault/megane" }
+  ]
+}
