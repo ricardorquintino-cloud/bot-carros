@@ -526,21 +526,40 @@ def main():
         if not nomes_bloco:
             continue
 
-        try:
-            resposta = sessao.get(pesquisa["url"], timeout=TIMEOUT)
-            resposta.raise_for_status()
-        except requests.RequestException as erro:
-            print(f"   {pesquisa['nome']}: falhou o pedido — {erro}")
-            time.sleep(PAUSA)
-            continue
-
         nome_site = pesquisa.get("site", "Standvirtual")
         site = dict(cfg.get("sites", {}).get(nome_site, {}), nome=nome_site)
-        anuncios = extrair_anuncios(resposta.text, site)
 
-        # Sem dados em JSON (ou JSON sem anuncios): tenta ler o HTML direto.
+        # `paginas` le mais do que a primeira pagina de resultados. Serve para
+        # sites sem filtros no endereco, onde a primeira pagina so traz destaques.
+        n_paginas = max(1, int(pesquisa.get("paginas", 1)))
+        molde = site.get("pagina_param", "?p={n}")
+
+        anuncios, falhou_tudo = [], True
+        for numero in range(1, n_paginas + 1):
+            url = pesquisa["url"]
+            if numero > 1:
+                sufixo = molde.format(n=numero)
+                url += sufixo.replace("?", "&", 1) if "?" in url else sufixo
+            try:
+                resposta = sessao.get(url, timeout=TIMEOUT)
+                resposta.raise_for_status()
+            except requests.RequestException as erro:
+                print(f"   [{nome_site}] {pesquisa['nome']} p{numero}: falhou o pedido — {erro}")
+                time.sleep(PAUSA)
+                continue
+
+            falhou_tudo = False
+            lote = extrair_anuncios(resposta.text, site)
+            if not lote:
+                lote = extrair_anuncios_html(resposta.text, site)
+            if lote:
+                anuncios.extend(lote)
+            time.sleep(PAUSA)
+
+        if falhou_tudo:
+            continue
         if not anuncios:
-            anuncios = extrair_anuncios_html(resposta.text, site) or anuncios
+            anuncios = None
 
         if anuncios is None:
             falhas_leitura += 1
@@ -576,7 +595,6 @@ def main():
         balanco[nome_site]["lidos"] += len(anuncios)
         balanco[nome_site]["novos"] += aceites
         print(f"   [{nome_site}] {pesquisa['nome']}: {len(anuncios)} lidos, {aceites} novos")
-        time.sleep(PAUSA)
 
     print("\n--- BALANCO POR SITE ---")
     for nome_site, b in balanco.items():

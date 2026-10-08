@@ -1,9 +1,7 @@
 {
   "_comentario": "Edita só este ficheiro. Cada pesquisa é um endereço copiado da barra do browser depois de fazeres a pesquisa no site com os filtros postos.",
-
   "max_por_email": 80,
   "preco_minimo_absoluto": 400,
-
   "_sites": "Como reconhecer um anuncio em cada site. 'marca_url' e o pedaco que aparece no endereco de qualquer anuncio desse site.",
   "sites": {
     "Standvirtual": {
@@ -12,10 +10,10 @@
     },
     "AutoSAPO": {
       "marca_url": "/carro-usado/",
-      "base": "https://auto.sapo.pt"
+      "base": "https://auto.sapo.pt",
+      "pagina_param": "?p={n}"
     }
   },
-
   "blocos": {
     "1A — Toyota recente": {
       "ano_min": 2010,
@@ -56,78 +54,288 @@
       "so_gasoleo": true
     }
   },
-
   "excluir": [
-    "hibrido", "híbrido", "hybrid", "eletrico", "elétrico", "electrico",
-    "para pecas", "para peças", "sinistrado", "acidentado", "salvado"
+    "hibrido",
+    "híbrido",
+    "hybrid",
+    "eletrico",
+    "elétrico",
+    "electrico",
+    "para pecas",
+    "para peças",
+    "sinistrado",
+    "acidentado",
+    "salvado"
   ],
-
   "motores_alerta": [
-    { "termo": "puretech", "aviso": "PureTech — correia em banho de óleo" },
-    { "termo": "1.6 thp", "aviso": "1.6 THP — corrente e carbonização" },
-    { "termo": "ecoboost", "aviso": "EcoBoost 1.0 — correia húmida; só pós-2018" },
-    { "termo": "powershift", "aviso": "PowerShift — dupla embraiagem a seco" },
-    { "termo": "edc", "aviso": "Renault EDC — mecatrónica" },
-    { "termo": "automatica", "aviso": "Caixa automática — confirmar histórico de óleo" },
-    { "termo": "automática", "aviso": "Caixa automática — confirmar histórico de óleo" },
-    { "termo": "d-4d", "aviso": "D-4D — vigiar EGR, FAP e volante bimassa" },
-    { "termo": "dci", "aviso": "dCi — injetores e turbo são o ponto fraco acima dos 150.000 km" }
+    {
+      "termo": "puretech",
+      "aviso": "PureTech — correia em banho de óleo"
+    },
+    {
+      "termo": "1.6 thp",
+      "aviso": "1.6 THP — corrente e carbonização"
+    },
+    {
+      "termo": "ecoboost",
+      "aviso": "EcoBoost 1.0 — correia húmida; só pós-2018"
+    },
+    {
+      "termo": "powershift",
+      "aviso": "PowerShift — dupla embraiagem a seco"
+    },
+    {
+      "termo": "edc",
+      "aviso": "Renault EDC — mecatrónica"
+    },
+    {
+      "termo": "automatica",
+      "aviso": "Caixa automática — confirmar histórico de óleo"
+    },
+    {
+      "termo": "automática",
+      "aviso": "Caixa automática — confirmar histórico de óleo"
+    },
+    {
+      "termo": "d-4d",
+      "aviso": "D-4D — vigiar EGR, FAP e volante bimassa"
+    },
+    {
+      "termo": "dci",
+      "aviso": "dCi — injetores e turbo são o ponto fraco acima dos 150.000 km"
+    }
   ],
-
   "pesquisas": [
-    { "bloco": "1A — Toyota recente", "nome": "Toyota Yaris", "url": "https://www.standvirtual.com/carros/toyota/yaris" },
-    { "bloco": "1A — Toyota recente", "nome": "Toyota Auris", "url": "https://www.standvirtual.com/carros/toyota/auris" },
-    { "bloco": "1A — Toyota recente", "nome": "Toyota Aygo", "url": "https://www.standvirtual.com/carros/toyota/aygo" },
-
-    { "bloco": "1B — Toyota km alto", "nome": "Toyota Corolla", "url": "https://www.standvirtual.com/carros/toyota/corolla" },
-    { "bloco": "1B — Toyota km alto", "nome": "Toyota Avensis", "url": "https://www.standvirtual.com/carros/toyota/avensis" },
-    { "bloco": "1B — Toyota km alto", "nome": "Toyota Corolla Verso", "url": "https://www.standvirtual.com/carros/toyota/corolla-verso" },
-
-    { "bloco": "2 — Citadinos", "nome": "Peugeot 107", "url": "https://www.standvirtual.com/carros/peugeot/107" },
-    { "bloco": "2 — Citadinos", "nome": "Peugeot 108", "url": "https://www.standvirtual.com/carros/peugeot/108" },
-    { "bloco": "2 — Citadinos", "nome": "Citroen C1", "url": "https://www.standvirtual.com/carros/citroen/c1" },
-    { "bloco": "2 — Citadinos", "nome": "Renault Clio", "url": "https://www.standvirtual.com/carros/renault/clio" },
-    { "bloco": "2 — Citadinos", "nome": "Renault Twingo", "url": "https://www.standvirtual.com/carros/renault/twingo" },
-    { "bloco": "2 — Citadinos", "nome": "Peugeot 207", "url": "https://www.standvirtual.com/carros/peugeot/207" },
-    { "bloco": "2 — Citadinos", "nome": "Peugeot 208", "url": "https://www.standvirtual.com/carros/peugeot/208" },
-    { "bloco": "2 — Citadinos", "nome": "Citroen C3", "url": "https://www.standvirtual.com/carros/citroen/c3" },
-    { "bloco": "2 — Citadinos", "nome": "Opel Corsa", "url": "https://www.standvirtual.com/carros/opel/corsa" },
-    { "bloco": "2 — Citadinos", "nome": "Ford Ka", "url": "https://www.standvirtual.com/carros/ford/ka" },
-    { "bloco": "2 — Citadinos", "nome": "Fiat Panda", "url": "https://www.standvirtual.com/carros/fiat/panda" },
-    { "bloco": "2 — Citadinos", "nome": "VW Polo", "url": "https://www.standvirtual.com/carros/volkswagen/polo" },
-    { "bloco": "2 — Citadinos", "nome": "Seat Ibiza", "url": "https://www.standvirtual.com/carros/seat/ibiza" },
-    { "bloco": "2 — Citadinos", "nome": "Skoda Fabia", "url": "https://www.standvirtual.com/carros/skoda/fabia" },
-    { "bloco": "2 — Citadinos", "nome": "Nissan Micra", "url": "https://www.standvirtual.com/carros/nissan/micra" },
-    { "bloco": "2 — Citadinos", "nome": "Hyundai i10", "url": "https://www.standvirtual.com/carros/hyundai/i10" },
-    { "bloco": "2 — Citadinos", "nome": "Kia Picanto", "url": "https://www.standvirtual.com/carros/kia/picanto" },
-
-    { "bloco": "3 — Ford Focus", "nome": "Ford Focus", "url": "https://www.standvirtual.com/carros/ford/focus" },
-
-    { "blocos": ["4A — Mégane recente", "4B — Mégane km alto"], "nome": "Renault Megane", "url": "https://www.standvirtual.com/carros/renault/megane" },
-
-    { "_nota": "Auto SAPO nao tem paginas por modelo: as paginas sao por MARCA e trazem tudo junto. Por isso cada pesquisa leva a lista de modelos que conta para cada escalao.",
-      "blocos": ["1A — Toyota recente", "1B — Toyota km alto"],
-      "site": "AutoSAPO", "nome": "Toyota (marca)",
-      "url": "https://auto.sapo.pt/carros/toyota.html",
-      "modelos_por_bloco": {
-        "1A — Toyota recente": ["yaris", "auris", "aygo"],
-        "1B — Toyota km alto": ["corolla", "avensis"]
-      } },
-    { "bloco": "3 — Ford Focus", "site": "AutoSAPO", "nome": "Ford (marca)",
-      "url": "https://auto.sapo.pt/carros/ford.html",
-      "modelos": ["focus"] },
-    { "blocos": ["4A — Mégane recente", "4B — Mégane km alto"],
-      "site": "AutoSAPO", "nome": "Renault (marca)",
-      "url": "https://auto.sapo.pt/carros/renault.html",
-      "modelos": ["megane", "mégane"] },
-    { "bloco": "2 — Citadinos", "site": "AutoSAPO", "nome": "Peugeot (marca)",
-      "url": "https://auto.sapo.pt/carros/peugeot.html",
-      "modelos": ["107", "108", "206", "207", "208"] },
-    { "bloco": "2 — Citadinos", "site": "AutoSAPO", "nome": "Citroen (marca)",
-      "url": "https://auto.sapo.pt/carros/citroen.html",
-      "modelos": ["c1", "c3"] },
-    { "bloco": "2 — Citadinos", "site": "AutoSAPO", "nome": "Opel (marca)",
-      "url": "https://auto.sapo.pt/carros/opel.html",
-      "modelos": ["corsa"] }
+    {
+      "bloco": "1A — Toyota recente",
+      "nome": "Toyota Yaris",
+      "url": "https://www.standvirtual.com/carros/toyota/yaris"
+    },
+    {
+      "bloco": "1A — Toyota recente",
+      "nome": "Toyota Auris",
+      "url": "https://www.standvirtual.com/carros/toyota/auris"
+    },
+    {
+      "bloco": "1A — Toyota recente",
+      "nome": "Toyota Aygo",
+      "url": "https://www.standvirtual.com/carros/toyota/aygo"
+    },
+    {
+      "bloco": "1B — Toyota km alto",
+      "nome": "Toyota Corolla",
+      "url": "https://www.standvirtual.com/carros/toyota/corolla"
+    },
+    {
+      "bloco": "1B — Toyota km alto",
+      "nome": "Toyota Avensis",
+      "url": "https://www.standvirtual.com/carros/toyota/avensis"
+    },
+    {
+      "bloco": "1B — Toyota km alto",
+      "nome": "Toyota Corolla Verso",
+      "url": "https://www.standvirtual.com/carros/toyota/corolla-verso"
+    },
+    {
+      "bloco": "2 — Citadinos",
+      "nome": "Peugeot 107",
+      "url": "https://www.standvirtual.com/carros/peugeot/107"
+    },
+    {
+      "bloco": "2 — Citadinos",
+      "nome": "Peugeot 108",
+      "url": "https://www.standvirtual.com/carros/peugeot/108"
+    },
+    {
+      "bloco": "2 — Citadinos",
+      "nome": "Citroen C1",
+      "url": "https://www.standvirtual.com/carros/citroen/c1"
+    },
+    {
+      "bloco": "2 — Citadinos",
+      "nome": "Renault Clio",
+      "url": "https://www.standvirtual.com/carros/renault/clio"
+    },
+    {
+      "bloco": "2 — Citadinos",
+      "nome": "Renault Twingo",
+      "url": "https://www.standvirtual.com/carros/renault/twingo"
+    },
+    {
+      "bloco": "2 — Citadinos",
+      "nome": "Peugeot 207",
+      "url": "https://www.standvirtual.com/carros/peugeot/207"
+    },
+    {
+      "bloco": "2 — Citadinos",
+      "nome": "Peugeot 208",
+      "url": "https://www.standvirtual.com/carros/peugeot/208"
+    },
+    {
+      "bloco": "2 — Citadinos",
+      "nome": "Citroen C3",
+      "url": "https://www.standvirtual.com/carros/citroen/c3"
+    },
+    {
+      "bloco": "2 — Citadinos",
+      "nome": "Opel Corsa",
+      "url": "https://www.standvirtual.com/carros/opel/corsa"
+    },
+    {
+      "bloco": "2 — Citadinos",
+      "nome": "Ford Ka",
+      "url": "https://www.standvirtual.com/carros/ford/ka"
+    },
+    {
+      "bloco": "2 — Citadinos",
+      "nome": "Fiat Panda",
+      "url": "https://www.standvirtual.com/carros/fiat/panda"
+    },
+    {
+      "bloco": "2 — Citadinos",
+      "nome": "VW Polo",
+      "url": "https://www.standvirtual.com/carros/volkswagen/polo"
+    },
+    {
+      "bloco": "2 — Citadinos",
+      "nome": "Seat Ibiza",
+      "url": "https://www.standvirtual.com/carros/seat/ibiza"
+    },
+    {
+      "bloco": "2 — Citadinos",
+      "nome": "Skoda Fabia",
+      "url": "https://www.standvirtual.com/carros/skoda/fabia"
+    },
+    {
+      "bloco": "2 — Citadinos",
+      "nome": "Nissan Micra",
+      "url": "https://www.standvirtual.com/carros/nissan/micra"
+    },
+    {
+      "bloco": "2 — Citadinos",
+      "nome": "Hyundai i10",
+      "url": "https://www.standvirtual.com/carros/hyundai/i10"
+    },
+    {
+      "bloco": "2 — Citadinos",
+      "nome": "Kia Picanto",
+      "url": "https://www.standvirtual.com/carros/kia/picanto"
+    },
+    {
+      "bloco": "3 — Ford Focus",
+      "nome": "Ford Focus",
+      "url": "https://www.standvirtual.com/carros/ford/focus"
+    },
+    {
+      "blocos": [
+        "4A — Mégane recente",
+        "4B — Mégane km alto"
+      ],
+      "nome": "Renault Megane",
+      "url": "https://www.standvirtual.com/carros/renault/megane"
+    },
+    {
+      "bloco": "1A — Toyota recente",
+      "site": "AutoSAPO",
+      "nome": "Toyota recente",
+      "url": "https://auto.sapo.pt/carros-usados?marca=toyota&ano-min=2010&preco-max=5500&km-max=175000",
+      "paginas": 4,
+      "modelos": [
+        "yaris",
+        "auris",
+        "aygo"
+      ]
+    },
+    {
+      "bloco": "1B — Toyota km alto",
+      "site": "AutoSAPO",
+      "nome": "Toyota km alto",
+      "url": "https://auto.sapo.pt/carros-usados?marca=toyota&ano-min=2005&preco-max=4000&km-max=250000",
+      "paginas": 4,
+      "modelos": [
+        "corolla",
+        "avensis"
+      ]
+    },
+    {
+      "bloco": "3 — Ford Focus",
+      "site": "AutoSAPO",
+      "nome": "Ford Focus",
+      "url": "https://auto.sapo.pt/carros-usados?marca=ford&ano-min=2012&preco-max=6500&km-max=175000",
+      "paginas": 4,
+      "modelos": [
+        "focus"
+      ]
+    },
+    {
+      "blocos": [
+        "4A — Mégane recente",
+        "4B — Mégane km alto"
+      ],
+      "site": "AutoSAPO",
+      "nome": "Renault Megane",
+      "url": "https://auto.sapo.pt/carros-usados?marca=renault&ano-min=2010&preco-max=6000&km-max=200000",
+      "paginas": 4,
+      "modelos": [
+        "megane",
+        "mégane"
+      ]
+    },
+    {
+      "bloco": "2 — Citadinos",
+      "site": "AutoSAPO",
+      "nome": "Peugeot citadinos",
+      "url": "https://auto.sapo.pt/carros-usados?marca=peugeot&ano-min=2010&preco-max=3500&km-max=175000",
+      "paginas": 3,
+      "modelos": [
+        "107",
+        "108",
+        "206",
+        "207",
+        "208"
+      ]
+    },
+    {
+      "bloco": "2 — Citadinos",
+      "site": "AutoSAPO",
+      "nome": "Citroen citadinos",
+      "url": "https://auto.sapo.pt/carros-usados?marca=citroen&ano-min=2010&preco-max=3500&km-max=175000",
+      "paginas": 3,
+      "modelos": [
+        "c1",
+        "c3"
+      ]
+    },
+    {
+      "bloco": "2 — Citadinos",
+      "site": "AutoSAPO",
+      "nome": "Renault citadinos",
+      "url": "https://auto.sapo.pt/carros-usados?marca=renault&ano-min=2010&preco-max=3500&km-max=175000",
+      "paginas": 3,
+      "modelos": [
+        "clio",
+        "twingo"
+      ]
+    },
+    {
+      "bloco": "2 — Citadinos",
+      "site": "AutoSAPO",
+      "nome": "Opel/Ford/Fiat citadinos",
+      "url": "https://auto.sapo.pt/carros-usados?marca=opel&ano-min=2010&preco-max=3500&km-max=175000",
+      "paginas": 3,
+      "modelos": [
+        "corsa"
+      ]
+    },
+    {
+      "bloco": "2 — Citadinos",
+      "site": "AutoSAPO",
+      "nome": "VW/Seat/Skoda citadinos",
+      "url": "https://auto.sapo.pt/carros-usados?marca=volkswagen&ano-min=2010&preco-max=3500&km-max=175000",
+      "paginas": 3,
+      "modelos": [
+        "polo"
+      ]
+    }
   ]
 }
