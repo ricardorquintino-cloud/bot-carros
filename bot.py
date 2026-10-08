@@ -60,7 +60,7 @@ def primeiro_numero(valor):
     if isinstance(valor, (int, float)):
         return int(valor)
     if isinstance(valor, dict):
-        for chave in ("value", "key", "label", "amount"):
+        for chave in ("value", "key", "label", "amount", "units", "displayValue"):
             if chave in valor:
                 n = primeiro_numero(valor[chave])
                 if n is not None:
@@ -87,14 +87,28 @@ def extrair_next_data(html):
         return None
 
 
-def percorrer(obj):
+def percorrer(obj, _prof=0):
+    """
+    Percorre a estrutura JSON. Quando encontra uma string que e ela propria
+    JSON, abre-a e continua la dentro — e assim que o Standvirtual guarda os
+    anuncios, dentro da cache de GraphQL em props.pageProps.urqlState.
+    """
+    if _prof > 60:
+        return
     if isinstance(obj, dict):
         yield obj
         for v in obj.values():
-            yield from percorrer(v)
+            yield from percorrer(v, _prof + 1)
     elif isinstance(obj, list):
         for v in obj:
-            yield from percorrer(v)
+            yield from percorrer(v, _prof + 1)
+    elif isinstance(obj, str) and len(obj) > 80:
+        texto = obj.lstrip()
+        if texto[:1] in "{[":
+            try:
+                yield from percorrer(json.loads(obj), _prof + 1)
+            except json.JSONDecodeError:
+                return
 
 
 def ler_parametros(no):
@@ -106,15 +120,22 @@ def ler_parametros(no):
             if not isinstance(p, dict):
                 continue
             chave = str(p.get("key") or p.get("name") or "").lower()
-            valor = p.get("value", p.get("displayValue"))
+            valor = p.get("value")
+            if valor in (None, "", []):
+                valor = p.get("displayValue")
             if chave in ("motor_year", "year", "ano"):
                 ano = primeiro_numero(valor)
             elif chave in ("motor_mileage", "mileage", "quilometros"):
                 km = primeiro_numero(valor)
             elif chave in ("price", "preco"):
                 preco = primeiro_numero(valor)
+
     if preco is None:
         preco = primeiro_numero(no.get("price"))
+    if ano is None:
+        ano = primeiro_numero(no.get("year"))
+    if km is None:
+        km = primeiro_numero(no.get("mileage"))
     return ano, km, preco
 
 
