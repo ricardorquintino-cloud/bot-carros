@@ -411,14 +411,17 @@ def titulo_tem_modelo(titulo, modelos):
     return False
 
 
-def suspeita_de_burla(anuncio, cfg):
+def suspeita_de_burla(anuncio, cfg, bloco=None):
     """
     Um carro recente a preco de sucata nao e pechincha, e isco.
-    Devolve o motivo quando o preco fica abaixo do minimo plausivel para a
-    idade do carro, e None quando o anuncio e credivel.
+    Devolve o motivo quando o preco fica abaixo do minimo plausivel, e None
+    quando o anuncio e credivel.
 
-    A tabela esta no config.json (`preco_minimo_por_idade`), para poderes
-    afinar sem mexer no codigo.
+    Duas coisas entram na conta:
+      1. a IDADE — tabela `preco_minimo_por_idade` no config.json;
+      2. o SEGMENTO — `fator_valor` do escalao. Um Megane nao vale o mesmo
+         que um Aygo com a mesma idade, por isso cada escalao multiplica o
+         minimo pelo seu fator.
     """
     ano, preco = anuncio.get("ano"), anuncio.get("preco")
     if not ano or not preco:
@@ -439,6 +442,9 @@ def suspeita_de_burla(anuncio, cfg):
             break
     if minimo is None:
         return None
+
+    fator = (bloco or {}).get("fator_valor", 1.0)
+    minimo = int(minimo * fator)
 
     if preco >= minimo:
         return None
@@ -470,7 +476,7 @@ def avaliar(anuncio, bloco, cfg):
 
     # So depois dos filtros basicos: assim o registo diz o motivo verdadeiro
     # em vez de chamar burla a um carro que apenas tinha km a mais.
-    burla = suspeita_de_burla(anuncio, cfg)
+    burla = suspeita_de_burla(anuncio, cfg, bloco)
     if burla:
         return False, f"BURLA: {burla}", []
 
@@ -658,11 +664,12 @@ def main():
                 modelos = (pesquisa.get("modelos_por_bloco", {}).get(nome_bloco)
                            or pesquisa.get("modelos"))
                 if modelos and not titulo_tem_modelo(a["titulo"], modelos):
-                    fora_de_lista.append(a["titulo"][:60])
+                    fora_de_lista.append(
+                        f'{a["titulo"][:42]:<44} {a.get("ano") or "?"}  {euros(a.get("preco"))}')
                     continue
                 ok, motivo, avisos = avaliar(a, cfg["blocos"][nome_bloco], cfg)
                 if not ok and motivo.startswith("BURLA"):
-                    burlas.append((a["titulo"][:46], motivo[7:]))
+                    burlas.append((a["titulo"][:40], a.get("km"), motivo[7:]))
                 if ok:
                     a["avisos"] = avisos
                     a["pesquisa"] = pesquisa["nome"]
@@ -677,15 +684,16 @@ def main():
 
     if fora_de_lista:
         print(f"\n--- {len(fora_de_lista)} ANUNCIOS DE OUTROS MODELOS, IGNORADOS ---")
-        for t in fora_de_lista[:8]:
-            print(f"   {t}")
-        if len(fora_de_lista) > 8:
-            print(f"   (e mais {len(fora_de_lista) - 8})")
+        for linha in fora_de_lista[:10]:
+            print(f"   {linha}")
+        if len(fora_de_lista) > 10:
+            print(f"   (e mais {len(fora_de_lista) - 10})")
 
     if burlas:
         print(f"\n--- {len(burlas)} BARRADOS POR SUSPEITA DE BURLA ---")
-        for t, motivo in burlas[:12]:
-            print(f"   {t:<48} {motivo}")
+        for t, km, motivo in burlas[:12]:
+            rodado = f"{km:,} km".replace(",", ".") if km else "km ?"
+            print(f"   {t:<42} {rodado:>12}   {motivo}")
         if len(burlas) > 12:
             print(f"   (e mais {len(burlas) - 12})")
 

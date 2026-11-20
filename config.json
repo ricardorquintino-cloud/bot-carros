@@ -20,39 +20,45 @@
       "ano_min": 2010,
       "km_max": 175000,
       "preco_max": 4000,
-      "preco_filtro": 4500
+      "preco_filtro": 4500,
+      "fator_valor": 1.0
     },
     "1B — Toyota km alto": {
       "ano_min": 2005,
       "km_max": 250000,
       "preco_max": 3500,
-      "preco_filtro": 4000
+      "preco_filtro": 4000,
+      "fator_valor": 1.0
     },
     "2 — Citadinos": {
       "ano_min": 2010,
       "km_max": 175000,
       "preco_max": 4000,
-      "preco_filtro": 4500
+      "preco_filtro": 4500,
+      "fator_valor": 1.0
     },
     "3 — Ford Focus": {
       "ano_min": 2012,
       "km_max": 175000,
       "preco_max": 6000,
-      "preco_filtro": 6500
+      "preco_filtro": 6500,
+      "fator_valor": 1.3
     },
     "4A — Mégane recente": {
       "ano_min": 2014,
       "km_max": 175000,
       "preco_max": 5500,
       "preco_filtro": 6000,
-      "so_gasoleo": true
+      "so_gasoleo": true,
+      "fator_valor": 1.3
     },
     "4B — Mégane km alto": {
       "ano_min": 2010,
       "km_max": 200000,
       "preco_max": 4000,
       "preco_filtro": 4500,
-      "so_gasoleo": true
+      "so_gasoleo": true,
+      "fator_valor": 1.3
     }
   },
   "excluir": [
@@ -443,15 +449,15 @@
       ]
     }
   ],
-  "_preco_minimo_por_idade": "Preco minimo plausivel por idade do carro. Abaixo disto e isco, nao pechincha. A chave e a idade maxima do escalao em anos.",
+  "_preco_minimo_por_idade": "Preco minimo plausivel por idade, calibrado para um citadino pequeno. Cada escalao multiplica pelo seu `fator_valor`. A chave e a idade maxima em anos.",
   "preco_minimo_por_idade": {
     "3": 9000,
     "5": 7000,
-    "7": 6000,
-    "9": 5000,
+    "7": 5500,
+    "9": 4500,
     "11": 3500,
     "13": 2500,
-    "15": 1500,
-    "99": 800
+    "15": 1800,
+    "99": 900
   }
 }
