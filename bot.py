@@ -395,6 +395,58 @@ def extrair_anuncios(html, site=None):
 
 
 # --------------------------------------------------------------- filtragem
+def titulo_tem_modelo(titulo, modelos):
+    """
+    O titulo corresponde a algum dos modelos? Usa fronteiras de palavra, nao
+    pedacos soltos: senao «Ka» apanhava Kadjar, Karoq e Kangoo, e «C3»
+    apanhava C3 Aircross tanto como um C30.
+    """
+    texto = sem_acentos(titulo)
+    for mod in modelos:
+        m = sem_acentos(mod).strip()
+        if not m:
+            continue
+        if re.search(r"(?<![a-z0-9])" + re.escape(m) + r"(?![a-z0-9])", texto):
+            return True
+    return False
+
+
+def suspeita_de_burla(anuncio, cfg):
+    """
+    Um carro recente a preco de sucata nao e pechincha, e isco.
+    Devolve o motivo quando o preco fica abaixo do minimo plausivel para a
+    idade do carro, e None quando o anuncio e credivel.
+
+    A tabela esta no config.json (`preco_minimo_por_idade`), para poderes
+    afinar sem mexer no codigo.
+    """
+    ano, preco = anuncio.get("ano"), anuncio.get("preco")
+    if not ano or not preco:
+        return None                      # sem dados nao se acusa ninguem
+
+    tabela = cfg.get("preco_minimo_por_idade")
+    if not tabela:
+        return None
+
+    idade = datetime.now().year - ano
+    if idade < 0:
+        return None
+
+    minimo = None
+    for limite, valor in sorted(((int(k), v) for k, v in tabela.items())):
+        if idade <= limite:
+            minimo = valor
+            break
+    if minimo is None:
+        return None
+
+    if preco >= minimo:
+        return None
+
+    return (f"{ano} ({idade} anos) por {euros(preco)} — abaixo dos "
+            f"{euros(minimo)} plausíveis para esta idade")
+
+
 def avaliar(anuncio, bloco, cfg):
     """Devolve (aceite, motivo, lista_de_avisos)."""
     texto = sem_acentos(anuncio["titulo"])
@@ -415,6 +467,12 @@ def avaliar(anuncio, bloco, cfg):
         return False, "ano abaixo do minimo", []
     if anuncio["km"] is not None and anuncio["km"] > bloco["km_max"]:
         return False, "km acima do maximo", []
+
+    # So depois dos filtros basicos: assim o registo diz o motivo verdadeiro
+    # em vez de chamar burla a um carro que apenas tinha km a mais.
+    burla = suspeita_de_burla(anuncio, cfg)
+    if burla:
+        return False, f"BURLA: {burla}", []
 
     # Escaloes so de gasoleo (Megane). Se o combustivel for desconhecido o
     # anuncio passa na mesma — mais vale ver um a mais do que perder um bom.
@@ -524,6 +582,7 @@ def main():
     novos = {nome: [] for nome in cfg["blocos"]}
     falhas_leitura = 0
     balanco = {}
+    burlas, fora_de_lista = [], []
 
     sessao = requests.Session()
     sessao.headers.update(HEADERS)
@@ -598,11 +657,12 @@ def main():
                 # `modelos` limita quais contam para este escalao.
                 modelos = (pesquisa.get("modelos_por_bloco", {}).get(nome_bloco)
                            or pesquisa.get("modelos"))
-                if modelos:
-                    titulo = sem_acentos(a["titulo"])
-                    if not any(sem_acentos(mod) in titulo for mod in modelos):
-                        continue
-                ok, _motivo, avisos = avaliar(a, cfg["blocos"][nome_bloco], cfg)
+                if modelos and not titulo_tem_modelo(a["titulo"], modelos):
+                    fora_de_lista.append(a["titulo"][:60])
+                    continue
+                ok, motivo, avisos = avaliar(a, cfg["blocos"][nome_bloco], cfg)
+                if not ok and motivo.startswith("BURLA"):
+                    burlas.append((a["titulo"][:46], motivo[7:]))
                 if ok:
                     a["avisos"] = avisos
                     a["pesquisa"] = pesquisa["nome"]
@@ -614,6 +674,20 @@ def main():
         balanco[nome_site]["lidos"] += len(anuncios)
         balanco[nome_site]["novos"] += aceites
         print(f"   [{nome_site}] {pesquisa['nome']}: {len(anuncios)} lidos, {aceites} novos")
+
+    if fora_de_lista:
+        print(f"\n--- {len(fora_de_lista)} ANUNCIOS DE OUTROS MODELOS, IGNORADOS ---")
+        for t in fora_de_lista[:8]:
+            print(f"   {t}")
+        if len(fora_de_lista) > 8:
+            print(f"   (e mais {len(fora_de_lista) - 8})")
+
+    if burlas:
+        print(f"\n--- {len(burlas)} BARRADOS POR SUSPEITA DE BURLA ---")
+        for t, motivo in burlas[:12]:
+            print(f"   {t:<48} {motivo}")
+        if len(burlas) > 12:
+            print(f"   (e mais {len(burlas) - 12})")
 
     print("\n--- BALANCO POR SITE ---")
     for nome_site, b in balanco.items():
